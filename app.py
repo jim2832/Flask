@@ -16,7 +16,7 @@ def getData():
 @app.route("/user/<name>")
 def getData(name):
     if(name == "jim"):
-        return "Hello there" + name
+        return "Hello there " + name
     else:
         return "Hello " + name
         
