@@ -22,4 +22,5 @@ def getData(name):
         
 
 # 啟動網站伺服器 (可以透過 port 參數個改 port number)
-app.run(port = 3000)
+# 預設 port = 5000
+app.run()
