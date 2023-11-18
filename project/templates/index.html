@@ -10,7 +10,20 @@
 <body>
     <h1>會員系統首頁</h1>
     <div>
-        <p>歡迎光臨</p>
+        <h2>歡迎光臨</h2>
+        <h3>會員註冊</h3>
+        <form action="/signup" method="POST">
+            Email <input type="text" name="username" id="username"><br><br>
+            密碼 <input type="password" name="password" id="password"><br><br>
+            <button type="submit">註冊</button>
+        </form>
+
+        <h3>會員登入</h3>
+        <form action="/signin" method="POST">
+            Email <input type="text" name="username" id="username"><br><br>
+            密碼 <input type="password" name="password" id="password"><br><br>
+            <button type="submit">登入</button>
+        </form>
     </div>
 </body>
 

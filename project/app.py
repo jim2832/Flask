@@ -28,15 +28,65 @@ app.secret_key = "123" # 設定一組密碼鑰匙
 def home():
     return render_template("index.html")
 
+
+# 註冊頁面 
+@app.route("/signup", methods=["POST"])
+def signup():
+    # 取得表單資料
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # 檢查帳號是否已經被註冊
+    user = db.users.find_one({"username": username})
+    if user:
+        return redirect("/system_msg?message=帳號已經被註冊！")
+    
+    # 儲存帳號密碼
+    db.users.insert_one({ "username": username, "password": password})
+
+    # 註冊成功，轉到登入頁面
+    return redirect("/system_msg?message=註冊成功！")
+
+
+# 登入頁面
+@app.route("/signin", methods=["POST"])
+def signin():
+    # 取得表單資料
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # 檢查帳號密碼是否正確
+    user = db.users.find_one({"$and": [{"username": username}, {"password": password}]})
+    if user:
+        # 設定 session
+        session["username"] = username
+        return redirect("/member")
+    else:
+        return redirect("/system_msg?message=帳號或密碼輸入錯誤！")
+    
+# 登出頁面
+@app.route("/signout")
+def signout():
+    # 清除 session
+    del session["username"]
+    return redirect("/")
+
+
 # 會員頁面
 @app.route("/member")
 def member():
-    return render_template("member.html")
+    # 檢查是否有登入
+    if "username" in session:
+        return render_template("member.html")
+    else:
+        return redirect("/")
 
-# 錯誤頁面
-@app.route("/error")
+
+# 系統訊息
+@app.route("/system_msg")
 def error():
     message = request.args.get("message", "發生不明錯誤")
-    return render_template("error.html", message=message)
+    return render_template("system_msg.html", message=message), {"Refresh": "2 ; url= / "}
+
 
 app.run(port=3000)
